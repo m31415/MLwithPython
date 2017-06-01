@@ -1,14 +1,9 @@
 from DataAccess import pandasRead
 from DataPrep import standardizer, dataFrameSplitter
-
+from Metric import metrics
 from sklearn.ensemble import RandomForestRegressor
 
 import pandas as pd
-
-def score(yPred,yTrue):
-    u = ((yTrue- yPred)**2).sum()
-    v = ((yTrue-yTrue.mean())**2).sum()
-    return (1 - (u/v))
 
 #Read raw Data Frame
 rawDf = pandasRead.readForestFire()
@@ -37,4 +32,6 @@ yPred = rfr.predict(x)
 y = y.sum(axis=1)
 
 
-print(score(yPred,y))
+print(metrics.r2score(yPred,y))
+print(metrics.mad(yPred,y))
+print(metrics.rmse(yPred,y))

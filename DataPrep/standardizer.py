@@ -4,7 +4,8 @@ class sdizer:
         self.dataFrame = dataFrame
         self.means = []
         self.stds = []
-     
+    
+    #normalize data to mean = 0, standarddeviation = 1
     def normalize(self):
         
         for column in self.dataFrame.columns:
