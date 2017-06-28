@@ -1,7 +1,7 @@
 from DataAccess import pandasRead
-from DataPrep import standardizer, dataFrameSplitter
-from Metric import metrics
 from sklearn.ensemble import RandomForestRegressor
+import regressionEvaluator
+import math
 
 import pandas as pd
 
@@ -11,27 +11,14 @@ rawDf = pandasRead.readForestFire()
 #encode Data Frame, categorial data day,month
 eDf = pd.get_dummies(rawDf, columns=['day','month'])
 
-#standardizer for NN or MR
-sd = standardizer.sdizer(eDf.copy())
+#setTarget
+target = 'area'
 
-#normalized Data Frame
-sd.normalize()
-nDf = sd.dataFrame
+#to much zeros transform 
+eDf.area = eDf.area.apply(math.log1p)
 
-#Split Data Frame into X train, Y target as NumPy Arrays
-x,y = dataFrameSplitter.splitDataFrame(nDf, 'area')
-
-#Train randomForrest
+#Use Random Forest Regressor
 rfr = RandomForestRegressor(n_estimators=500)
-rfr.fit(x,y)
 
-#predict 
-yPred = rfr.predict(x)
-
-#transpose y
-y = y.sum(axis=1)
-
-
-print(metrics.r2score(yPred,y))
-print(metrics.mad(yPred,y))
-print(metrics.rmse(yPred,y))
+#evaluate model
+regressionEvaluator.evaluate(eDf, rfr, target)

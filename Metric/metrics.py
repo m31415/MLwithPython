@@ -1,5 +1,7 @@
 import math
 
+#Regression Metrics
+
 # R**2 Score 
 def r2score(yPred,yTrue):
     
@@ -10,11 +12,11 @@ def r2score(yPred,yTrue):
     return r2score
 
 #Mean absolute deviation MAD
-def mad(yTrue, yPred):
+def mad(yPred, yTrue):
     
     n = yTrue.size
     absoluteDelta = sum(abs(yTrue - yPred))
-    mad = absoluteDelta * (1/n)
+    mad = absoluteDelta / n
     
     return mad
 
